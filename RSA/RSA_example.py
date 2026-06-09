@@ -5,6 +5,7 @@ import secrets
 
 
 def is_prime(n):
+    """Return True/False if the number is prime or not"""
     if n < 2:
         return False
 
@@ -16,6 +17,7 @@ def is_prime(n):
 
 
 def find_next_prime(n):
+    """Iterate from a starting point, and find the next prime number"""
     n += 1
     while not is_prime(n):
         n += 1
@@ -23,7 +25,27 @@ def find_next_prime(n):
 
 
 def get_factors(n):
-    """Get all the numbers which multiply to make the number"""
+    """
+        Get all the numbers which multiply to make the number
+
+        Example:
+            imagine the number 18:
+            18 / 2 is whole number
+            18 / 2 = 9
+            n is now 9
+            factors appends 2
+
+            9 / 2 is not whole number
+            9 / 3 is whole number
+            9 / 3 = 3
+            n is now 3
+            factors appends 3
+
+            3 / 2 is not whole
+            3 / 3 = 1
+            smallest factor reached
+            return factors
+    """
     factors = []
     smallest_factor = False
     current_divisor = 2
@@ -45,35 +67,32 @@ def get_factors(n):
     return factors
 
 
-test = """
-
-imagine the number 18:
-18 / 2 is whole number
-18 / 2 = 9
-n is now 9
-factors appends 2
-
-9 / 2 is not whole number
-9 / 3 is whole number
-9 / 3 = 3
-n is now 3
-factors appends 3
-
-3 / 2 is not whole
-3 / 3 = 1
-smallestf actor reached
-
-
-"""
-
-factors = get_factors(18)
-
-
 def get_coprime(n):
     """Coprime contains no common factors with the target integer"""
+    # Get factors of the input
+    factors = get_factors(n)
+    coprime_found = False
+    potential_coprime = 4
+    while not coprime_found:
+        potential_coprime_factors = get_factors(n=potential_coprime)
+        no_factors_in_common = True
+        for factor in potential_coprime_factors:
+            if factor in factors:
+                no_factors_in_common = False
+                break
+        if no_factors_in_common:
+            return potential_coprime
+        else:
+            potential_coprime += 1
 
-    pass
 
+factors = get_factors(18)  # factors = [2, 3, 9]
+coprime = get_coprime(18)  # smallest coprime = 5
+
+
+# --------------------
+# ---- Main method ---
+# --------------------
 
 # -----------------------------------------
 #  Step 1. Create the message and encode it
@@ -97,7 +116,7 @@ print("Message as int: ", m)
 
 # Pick 2 prime numbers
 # NOTE: the product of these, N must be larger than m
-start_counting_from = 1000
+start_counting_from = 10000000
 p = find_next_prime(n=start_counting_from)
 q = find_next_prime(n=p)
 
