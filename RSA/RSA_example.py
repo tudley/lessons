@@ -86,80 +86,90 @@ def get_coprime(n):
             potential_coprime += 1
 
 
-factors = get_factors(18)  # factors = [2, 3, 9]
-coprime = get_coprime(18)  # smallest coprime = 5
+# factors = get_factors(18)  # factors = [2, 3, 9]
+# coprime = get_coprime(18)  # smallest coprime = 5
 
 
 # --------------------
 # ---- Main method ---
 # --------------------
 
-# -----------------------------------------
-#  Step 1. Create the message and encode it
-# -----------------------------------------
+def rsa_decrypt(message):
+    # -----------------------------------------
+    #  Step 1. Create the message and encode it
+    # -----------------------------------------
 
-# Message to be encoded and decoded
-message = "A"
-print("Unencrypted: ", message)
+    # Message to be encoded and decoded
 
-# Encode the message to bytes
-message_bytes = message.encode("utf-8")
+    print("Unencrypted: ", message)
 
-# Encode the bytes to an integer
-m = int.from_bytes(message_bytes, "big")
-print("Message as int: ", m)
+    # Encode the message to bytes
+    message_bytes = message.encode("utf-8")
+
+    # Encode the bytes to an integer
+    m = int.from_bytes(message_bytes, "big")
+    print("Message as int: ", m)
+
+    # ---------------------------------------------
+    #  Step 2. Create the RSA encryption parameters
+    # ---------------------------------------------
+
+    # Pick 2 prime numbers
+    # NOTE: the product of these, N must be larger than m
+
+    start_counting_from = 10000000
+    p = find_next_prime(n=start_counting_from)
+    q = find_next_prime(n=p)
+
+    # Find the product of the primes
+    n = p * q
+    print("n: ", n)
+    print("m < n: ", m < n)
+    if not (m < n):
+        print("""
+            The encoded message must be smaller than the product of the 2 primes, otherwise:
+            big number % small number
+            loses a lot of data
+            """
+              )
+        return
+
+    # Find the Eulers Totient of n
+    phi = (p-1)*(q-1)
+    # phi = 8
+
+    # Pick a number for e (coprime with phi)
+    e = get_coprime(n=phi)
+
+    # Find d
+    d = pow(e, -1, phi)
+    # d = 7
+    print(d)
+
+    # Create the key values
+    private_key = (n, d)
+    public_key = (n, e)
+
+    # -------------------------------------------------
+    #  Step 3. Encrypt the message using RSA encryption
+    # -------------------------------------------------
+
+    # encrypted = (m ** e) % n
+    # Simpler syntax and easier for the computer to calculate
+    encrypted = pow(m, e, n)
+    print("Encrypted: ", encrypted)
+
+    # -----------------------------
+    #  Step 4.  Decrypt the message
+    # -----------------------------
+
+    # decrypted_as_int: int = (encrypted ** d) % n
+    # simpler syntax and easier for the computer to calculate
+    decrypted_as_int = pow(encrypted, d, n)
+    decrypted_bytes = decrypted_as_int.to_bytes(128, "big")
+    decrypted_string = decrypted_bytes.decode("utf-8")
+    print("Decrypted: ", decrypted_string)
 
 
-# ---------------------------------------------
-#  Step 2. Create the RSA encryption parameters
-# ---------------------------------------------
-
-# Pick 2 prime numbers
-# NOTE: the product of these, N must be larger than m
-start_counting_from = 10000000
-p = find_next_prime(n=start_counting_from)
-q = find_next_prime(n=p)
-
-# Find the product of the primes
-n = p * q
-print("n: ", n)
-print("m < n: ", m < n)
-if not (m < n):
-    print("""
-        The encoded message must be smaller than the product of the 2 primes, otherwise:
-        big number % small number
-        loses a lot of data
-        """
-          )
-
-# Find the Eulers Totient of n
-phi = (p-1)*(q-1)
-# phi = 8
-
-# Pick a number for e (coprime with phi)
-e = get_coprime(n=phi)
-
-# Find d
-d = pow(e, -1, phi)
-# d = 7
-print(d)
-
-# Create the key values
-private_key = (n, d)
-public_key = (n, e)
-
-# -------------------------------------------------
-#  Step 3. Encrypt the message using RSA encryption
-# -------------------------------------------------
-
-encrypted = (m ** e) % n
-print("Encrypted: ", encrypted)
-
-# -----------------------------
-#  Step 4.  Decrypt the message
-# -----------------------------
-
-decrypted_as_int: int = (encrypted ** d) % n
-decrypted_bytes = decrypted_as_int.to_bytes(128, "big")
-decrypted_string = decrypted_bytes.decode("utf-8")
-print("Decrypted: ", decrypted_string)
+if __name__ == "__main__":
+    rsa_decrypt("Hello!")
