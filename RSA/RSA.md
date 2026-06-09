@@ -26,9 +26,9 @@ To calculate _n_, multiply _p_ and _q_:
 
 ### Step 2.2
 
-To get the values of _e_ and _d_, the Euler phi function is used.
+To get the values of _e_ and _d_, the Euler phi function is used. (Eulers Totient)
 
-It calculates how many of the numbers less than or equal to n are coprime to n
+It calculates how many positive integers less than n are coprime with n.
 
     *coprime - 2 numbers that share no common factors (apart from 1). eg. 8 and 15 are coprime, even though neither are prime*
 
@@ -44,12 +44,11 @@ The number _e_ can be chosen freely, but it must be coprime to ϕ(n) (120)
 
 ### Step 2.4
 
-The number _d_ is the multiplicative inverse to _e_
-
-    Multiplicative inverse: d * e = 1, so d = 1/e
+d is the modular multiplicative inverse of e modulo φ(n).
 
 This means:
-(e⋅d)modϕ(n)=1
+
+    (e⋅d)modϕ(n)=1
 
 **So d must equal 113**
 
