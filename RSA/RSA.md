@@ -78,4 +78,6 @@ c = 88
 
 ### Notes
 
-Though this example uses numbers, we can convert the numbers to letters using an encoding system such as ASCII
+- Though this example uses numbers, we can convert the numbers to letters using an encoding system such as ASCII
+
+- M, the integer we're encoding must be smaller than n, the product of our 2 prime numbers
