@@ -53,29 +53,56 @@ FROM
 WHERE   
     Country='Germany'
 
-
 -- Exercise 6
 -- Find all Products that cost more than 20.00.
-
+SELECT
+    *
+FROM
+    dbo.Products
+WHERE   
+    UnitPrice>20
 
 -- Exercise 7
 -- Find all Orders placed after 1st January 1997.
 -- Column: OrderDate
-
+SELECT
+    *
+FROM
+    dbo.Orders
+WHERE
+    OrderDate>'1997-01-01'
 
 -- Exercise 8
 -- Find all Products where UnitsInStock is 0
 -- (i.e. currently out of stock).
-
+SELECT
+    *
+FROM
+    dbo.Products
+WHERE
+    UnitsInStock=0
 
 -- Exercise 9
 -- Find all Customers whose Country is either 'France' or 'Spain'.
 -- Hint: IN
-
+SELECT
+    *
+FROM
+    dbo.Customers
+WHERE
+    Country
+IN
+    ('France', 'Spain')
 
 -- Exercise 10
 -- Find all Products whose ProductName starts with the letter 'C'.
 -- Hint: LIKE
+SELECT
+    *
+FROM
+    dbo.Products
+WHERE
+    ProductName LIKE 'C%'
 
 
 -- == LEVEL 3: Sorting ==
